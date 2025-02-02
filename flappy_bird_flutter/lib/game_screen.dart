@@ -1,106 +1,74 @@
+import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flappy_bird_flutter/assets_repository.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:logging/logging.dart';
 
+import 'game/ground.dart';
+import 'game/player.dart';
+
 final log = Logger('main.dart');
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
 
   @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  @override
   Widget build(BuildContext context) {
-    return GameWidget(game: MyGame());
+    return GameWidget(game: MyGame(), );
   }
 }
 
 class MyGame extends FlameGame with TapCallbacks {
-  late Player myComponent;
+  late Player player;
+  late Ground ground;
+
+  MyGame()
+      : super(
+    camera: CameraComponent.withFixedResolution(
+      width: 1000,
+      height: 600,
+    ),
+  );
+
 
   @override
-  Color backgroundColor() => Colors.redAccent;
+  FutureOr<void> onLoad() async {
+    debugMode = true;
 
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    log.info("size changed ${size.length}");
-  }
-
-  @override
-  void onMount() {
-    super.onMount();
-    add(myComponent = Player());
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    myComponent.jump();
-    super.onTapDown(event);
-  }
-
-}
+    ground = Ground(position: Vector2(0, 0));
+    player = Player(position: Vector2(-size.x/2+100, 0), size: Vector2(64, 64));
 
 
-class Player extends PositionComponent  {
-  final Vector2 _velocity = Vector2(0.0, 20.0);
-  final _gravity = 60.0;
-  final _jump = 220.0;
+    // Adds the component
+    world.add(RectangleComponent(position: -size/2, anchor: Anchor.topLeft, size: size));
+    world.add(ground);
+    world.add(player);
 
 
-  // called only once
-  @override
-  void onLoad() {
-    log.info("onload()");
-
-    super.onLoad();
-  }
-
-  // called each time mounted
-  @override
-  void onMount() {
-    log.info("onmount");
-    position = Vector2(100,150);
-
-    super.onMount();
-  }
-
-  // called each time removed
-  @override
-  void onRemove() {
-    log.info("onremove");
-
-    super.onRemove();
+    // camera.viewport.position = Vector2(600, 0);
+    return super.onLoad();
   }
 
 
-  void jump() {
-    _velocity.y += -_jump;
-  }
-
-  //  called every frame
   @override
   void update(double dt) {
-    log.info("update");
-    position += _velocity*dt;
-    _velocity.y += _gravity*dt;
+    final cameraY = camera.viewfinder.position.y;
+    // final playerY = myPlayer.position.y;
 
     super.update(dt);
   }
 
-  // called every frame
   @override
-  void render(Canvas canvas) {
-    log.info("render");
-
-    canvas.drawCircle(position.toOffset(), 15, Paint()..color = Colors.yellow);
-    super.render(canvas);
+  void onTapDown(TapDownEvent event) {
+    player.jump();
+    super.onTapDown(event);
   }
 }
