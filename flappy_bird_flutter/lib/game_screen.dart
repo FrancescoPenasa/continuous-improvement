@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flappy_bird_flutter/assets_repository.dart';
+import 'package:flappy_bird_flutter/game/testing_parallax.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:logging/logging.dart';
 
@@ -29,12 +29,13 @@ class _GameScreenState extends State<GameScreen> {
 class MyGame extends FlameGame with TapCallbacks {
   late Player player;
   late Ground ground;
+  late MyParallaxComponent background;
 
   MyGame()
       : super(
     camera: CameraComponent.withFixedResolution(
-      width: 1000,
-      height: 600,
+      width: 1280,
+      height: 720,
     ),
   );
 
@@ -43,12 +44,14 @@ class MyGame extends FlameGame with TapCallbacks {
   FutureOr<void> onLoad() async {
     debugMode = true;
 
-    ground = Ground(position: Vector2(0, 0));
+    ground = Ground(position: Vector2(-size.x/2, size.y/2-20), size: Vector2(size.x, 20.0));
     player = Player(position: Vector2(-size.x/2+100, 0), size: Vector2(64, 64));
-
+    background = MyParallaxComponent(position: -size/2, size: size);
 
     // Adds the component
     world.add(RectangleComponent(position: -size/2, anchor: Anchor.topLeft, size: size));
+
+    world.add(background);
     world.add(ground);
     world.add(player);
 

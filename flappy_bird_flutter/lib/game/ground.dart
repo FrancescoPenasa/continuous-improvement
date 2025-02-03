@@ -3,15 +3,29 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-class Ground extends PositionComponent {
-  static const String keyName = 'single_ground_key';
-  Ground({required super.position}) : super(size: Vector2(100, 5), anchor: Anchor.center, key: ComponentKey.named(keyName));
+import '../game_screen.dart';
+
+class Ground extends SpriteComponent with HasGameRef<MyGame> {
+  // static const String keyName = 'single_ground_key';
+
+  Ground({required Vector2 position, required Vector2 size})
+      : super(position: position, size: size,);
+            // key: ComponentKey.named(keyName)
+
+  @override
+  FutureOr<void> onLoad() async {
+    sprite = await Sprite.load('ground.png');
+    return super.onLoad();
+  }
 
 
 
   @override
-  void render(Canvas canvas) {
-    canvas.drawRect(
-        Rect.fromLTWH(0, 0, width, height), Paint()..color = Colors.red);
+  void update(double dt) {
+    super.update(dt);
+
+    var a = 5;
+
   }
+
 }
