@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flappy_bird_flutter/game/pipe.dart';
 import 'package:flappy_bird_flutter/game/testing_parallax.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:logging/logging.dart';
@@ -30,6 +31,7 @@ class MyGame extends FlameGame with TapCallbacks {
   late Player player;
   late Ground ground;
   late MyParallaxComponent background;
+  late List<Pipe> pipes;
 
   MyGame()
       : super(
@@ -42,10 +44,11 @@ class MyGame extends FlameGame with TapCallbacks {
 
   @override
   FutureOr<void> onLoad() async {
-    debugMode = true;
+    // debugMode = true;
 
     ground = Ground(position: Vector2(-size.x/2, size.y/2-20), size: Vector2(size.x, 20.0));
     player = Player(position: Vector2(-size.x/2+100, 0), size: Vector2(64, 64));
+    pipes = [Pipe(position: Vector2(size.x/2, size.y/2 -320), size: Vector2(64, 320), rotated: false), Pipe(position: Vector2(size.x/2, -size.y/2 + 320), size: Vector2(64, 320), rotated: true)];
     background = MyParallaxComponent(position: -size/2, size: size);
 
     // Adds the component
@@ -55,6 +58,7 @@ class MyGame extends FlameGame with TapCallbacks {
     world.add(ground);
     world.add(player);
 
+    world.addAll(pipes);
 
     // camera.viewport.position = Vector2(600, 0);
     return super.onLoad();
