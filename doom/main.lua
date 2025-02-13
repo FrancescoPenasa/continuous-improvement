@@ -32,7 +32,7 @@ function love.load()
 
     love.keyboard.keysPressed = {}
 
-    player = Player(70 , -110, 20, 0, 0) 
+    player = Player(70 , -110, 80, 0, 0) 
 end
 
 function love.resize(w, h)
@@ -94,44 +94,96 @@ function love.draw()
     push:apply('end')
 end
 
+function drawWall(x1, x2, b1, b2, t1, t2)
+    dyb = b2-b1
+    dyt = t2-t1
+    dx = x2-x1
+    if dx == 0 then
+        dx = 1
+    end
+    xs = x1
+
+    -- x clip
+    if x1 < 1 then
+        x1 = 1
+    end
+    if x2 < 1 then
+        x2 = 1
+    end
+    if x2 > VIRTUAL_WIDTH-1 then
+        x2 = VIRTUAL_WIDTH-1
+    end
+    if x1 > VIRTUAL_WIDTH-1 then
+        x1 = VIRTUAL_WIDTH-1
+    end
+
+    for x = x1, x2 do
+        y1 = b1 + dyb * (x-xs+0.5) / dx
+        y2 = t1 + dyt * (x-xs+0.5) / dx
+
+        -- y clip
+        if y1 < 1 then
+            y1 = 1
+        end
+        if y2 < 1 then
+            y2 = 1
+        end
+        if y2 > VIRTUAL_HEIGHT-1 then
+            y2 = VIRTUAL_HEIGHT-1
+        end 
+        if y1 > VIRTUAL_HEIGHT-1 then
+            y1 = VIRTUAL_HEIGHT-1
+        end
+
+        for y=y1, y2 do
+            pixel(x, y, "yellow")
+        end
+    end
+end
+
 function draw3d() 
     cs = math.cos(player.angle)
     sn = math.sin(player.angle)
 
+    
     -- wall coordinates respect to the player
     x1=40-player.x
     y1=140-player.y
     x2=40-player.x
     y2=200-player.y
 
+    wall = {
+        -- position
+        x={
+            x1*cs-y1*sn, 
+            x2*cs-y2*sn, 
+            x1*cs-y1*sn,
+            x2*cs-y2*sn}, 
+        -- depth
+        y={
+            y1*cs+x1*sn, 
+            y2*cs+x2*sn, 
+            y1*cs+x1*sn, 
+            y2*cs+x2*sn}, 
+        -- height
+        z={
+            0 - player.z + ((player.look-y1*cs+x1*sn)/32.0),
+            0 - player.z + ((player.look-y2*cs+x2*sn)/32.0) ,
+            0 - player.z + ((player.look-y1*cs+x1*sn)/32.0)+ 40 ,
+            0 - player.z + ((player.look-y2*cs+x2*sn)/32.0) + 40 }
+    }
 
-    -- position
-    wx0 = x1*cs-y1*sn
-    wx1 = x2*cs-y2*sn
+    -- scale it to scree
+    wall.x[1] = wall.x[1]*200/wall.y[1]+VIRTUAL_WIDTH/2
+    wall.y[1] = wall.z[1]*200/wall.y[1]+VIRTUAL_HEIGHT/2
+    wall.x[2] = wall.x[2]*200/wall.y[2]+VIRTUAL_WIDTH/2
+    wall.y[2] = wall.z[2]*200/wall.y[2]+VIRTUAL_HEIGHT/2
+    wall.x[3] = wall.x[3]*200/wall.y[3]+VIRTUAL_WIDTH/2
+    wall.y[3] = wall.z[3]*200/wall.y[3]+VIRTUAL_HEIGHT/2
+    wall.x[4] = wall.x[4]*200/wall.y[4]+VIRTUAL_WIDTH/2
+    wall.y[4] = wall.z[4]*200/wall.y[4]+VIRTUAL_HEIGHT/2
 
-    --  depth
-    wy0 = y1*cs+x1*sn
-    wy1 = y2*cs+x2*sn 
-
-    -- height
-    wz0 = 0- player.z + ((player.look-wy0)/32.0)
-    wz1 = 0- player.z + ((player.look-wy1)/32.0)
-
-
-    -- screen coordinates
-    wx0 = wx0*200/wy0+VIRTUAL_WIDTH/2
-    wy0 = wz0*200/wy0+VIRTUAL_HEIGHT/2
-    wx1 = wx1*200/wy1+VIRTUAL_WIDTH/2
-    wy1 = wz1*200/wy1+VIRTUAL_HEIGHT/2
-
-    if(wx0 > 0 and wx0 < VIRTUAL_WIDTH and wy0>0 and wy0<VIRTUAL_HEIGHT) then
-        pixel(wx0, wy0, "yellow")
-    end
-    if(wx1 > 0 and wx1 < VIRTUAL_WIDTH and wy1>0 and wy1<VIRTUAL_HEIGHT) then
-        pixel(wx1, wy1, "green")
-    end
-
-    
+    drawWall(wall.x[1], wall.x[2], wall.y[1], wall.y[2], wall.y[3], wall.y[4] )
 end
 
 function clearBackground() 

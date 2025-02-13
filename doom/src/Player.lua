@@ -14,15 +14,22 @@ end
 
 function Player:update(dt)
     if love.keyboard.isDown('a') and not love.keyboard.isDown('m') then
-        self.angle = self.angle - math.pi/45 * dt
+        self.angle = self.angle - math.pi/5 * dt
     end
     if love.keyboard.isDown('d') and not love.keyboard.isDown('m') then
-        self.angle = self.angle + math.pi/45 * dt
+        self.angle = self.angle + math.pi/5 * dt
     end
 
-    self.dx=math.sin(self.angle)*10.0;
-    self.dy=math.cos(self.angle)*10.0;
+    self.dx=math.sin(self.angle)*70.0;
+    self.dy=math.cos(self.angle)*70.0;
 
+    -- fix angle
+    if self.angle > math.pi * 2 then
+        self.angle = self.angle - math.pi * 2
+    end
+    if self.angle < 0 then
+        self.angle = self.angle + math.pi * 2
+    end
     if love.keyboard.isDown('w') and not love.keyboard.isDown('m') then
         self.x = self.x + self.dx * dt
         self.y = self.y + self.dy * dt
@@ -58,13 +65,6 @@ function Player:update(dt)
     end
 
 
-    -- fix angle
-    if self.angle > math.pi * 2 then
-        self.angle = self.angle - math.pi * 2
-    end
-    if self.angle < 0 then
-        self.angle = self.angle + math.pi * 2
-    end
 end
 
 -- function Bird:render()
