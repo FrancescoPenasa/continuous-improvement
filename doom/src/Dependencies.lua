@@ -6,6 +6,7 @@ Class = require 'lib/class'
 
 -- a few global constants, centralized
 require 'src/constants'
+require 'src/Player'
 
 -- -- the powerup class
 -- require 'src/Powerup'
