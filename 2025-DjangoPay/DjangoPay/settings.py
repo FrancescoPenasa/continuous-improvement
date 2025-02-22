@@ -15,26 +15,37 @@ import os
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+	"formatters": {
+		"standard": {
+			"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+		}
+	},
     "handlers": {
         "console": {
+			"level": "DEBUG",
             "class": "logging.StreamHandler",
+			"formatter": "standard",
+			"filters": [],
         },
-        # "file": {
-        #     "level": "DEBUG",
-        #     "class": "logging.FileHandler",
-        #     "filename": "/path/to/django/debug.log",
-        # },
+        "file": {
+			"level": "INFO",
+            "class": "logging.FileHandler",
+			"formatter": "standard",
+			"filters": [],
+            "filename": "./debug.log",
+        },
     },
-    "root": {
-        "handlers": ["console"],
-        "level": "DEBUG",
-    },
-
-    "myproject.custom": {
-        "handlers": ["console"],
-        "level": "INFO",
-        # "filters": ["special"],
-    },
+	"loggers": {
+		logger_name: {
+			"handlers": ["console",],
+			"level": "DEBUG",
+			"propagate": True,
+		} for logger_name in ("core", "payments", "polls")
+	},
+	"root": {
+		"level": "INFO",
+		"handlers": ["console",],
+	}
 }
 
 

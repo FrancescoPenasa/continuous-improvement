@@ -10,3 +10,16 @@ Do success page and error page
 Product
 
 Order
+
+
+
+# Django 
+- `django-admin startproject project` (not using a particular name)
+- `mv project newNmae`
+- `cp otherproj.gitignore .gitignore `
+- `create README.rst`
+- `poetry (npm python)`
+
+makefile
+uv
+ruff

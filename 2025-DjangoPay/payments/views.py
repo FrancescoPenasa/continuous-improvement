@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 def index(request):
     output = "ciaone"
+    logger.warning("test warning")
+    logger.info("test info")
+    logger.debug("test debug")
     return HttpResponse(output)
 
 # get
