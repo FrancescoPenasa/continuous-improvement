@@ -1,0 +1,27 @@
+<h1>Questo è il product {{ product.name }} </h1>
+<h3>Descrizione: {{ product.description }} </h3>
+
+<form action="{% url 'payments:submit' product.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ product.name }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <label for="participants">Choose a partecipants:</label>
+    <select name="participants" id="participants">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+     <label for="timeslot">Choose a timeslot:</label>
+    <select name="timeslot" id="timeslot">
+        {% for slot in timeslots %}
+            <option value="{{ slot.id }}">{{ slot }}</option>
+        {% endfor %}
+    </select>
+
+</fieldset>
+<input type="submit" value="Vote">
+</form>
