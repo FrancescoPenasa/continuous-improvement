@@ -13,7 +13,7 @@ class TransactionFormPage extends ConsumerStatefulWidget {
   const TransactionFormPage({super.key, this.transactionId});
 
   @override
-  _TransactionFormPageState createState() => _TransactionFormPageState();
+  ConsumerState createState() => _TransactionFormPageState();
 }
 
 class _TransactionFormPageState extends ConsumerState<TransactionFormPage> {

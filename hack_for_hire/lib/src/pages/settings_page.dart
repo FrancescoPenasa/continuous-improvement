@@ -45,10 +45,11 @@ class SettingsPage extends ConsumerWidget {
               title: Text("Export Transactions (json)"),
               leading: Icon(Icons.download),
               onTap: () async {
+                final scaffoldMessenger = ScaffoldMessenger.of(context); // store the Navigator
                 await ref
                     .read(transactionListProvider.notifier)
                     .exportTransactions()
-                    .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                    .then((value) => scaffoldMessenger.showSnackBar(
                           SnackBar(
                             content: Text('Export Saved in $value'),
                             duration: Duration(seconds: 4),

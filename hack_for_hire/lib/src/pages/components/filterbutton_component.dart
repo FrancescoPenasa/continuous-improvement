@@ -4,11 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/transaction_model.dart';
 import '../../providers/transaction_provider.dart';
 
+
 class FilterButton extends ConsumerStatefulWidget {
   const FilterButton({super.key});
 
   @override
-  _FilterButtonState createState() => _FilterButtonState();
+  ConsumerState createState() => _FilterButtonState();
 }
 
 class _FilterButtonState extends ConsumerState<FilterButton> {

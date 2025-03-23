@@ -21,6 +21,7 @@ class _DataImporterTileState extends ConsumerState<DataImporterTile> {
       title: Text("Import Transactions (json)"),
       leading: Icon(Icons.upload),
       onTap: () async {
+        final scaffoldMessenger = ScaffoldMessenger.of(context); // sto
         final importer = TransactionImporterController();
         final importedTransactions = await importer.importTransactions();
         setState(() {
@@ -28,7 +29,7 @@ class _DataImporterTileState extends ConsumerState<DataImporterTile> {
         });
 
         // Optionally, show a success message
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           SnackBar(
               content: Text('${transactions.length} transactions imported!')),
         );
