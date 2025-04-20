@@ -58,11 +58,11 @@ class MyGame extends FlameGame with TapCallbacks {
     // init game objects
     // ground = Ground(position: Vector2(-size.x/2, size.y/2-20), size: Vector2(size.x, 20.0));
     player = Player(position: Vector2(-size.x/2+100, 0), size: Vector2(64, 64));
-    pipe_pairs.add(PipePair(position: Vector2(size.x/2, Random().nextInt(240) - 120.0 ))); // between 120 and -120
+    // pipe_pairs.add(PipePair(position: Vector2(size.x/2, Random().nextInt(240) - 120.0 ))); // between 120 and -120
     background = MyParallaxComponent(position: -size/2, size: size);
 
     // Adds the component to world
-    world.add(RectangleComponent(position: -size/2, anchor: Anchor.topLeft, size: size));
+    // world.add(RectangleComponent(position: -size/2, anchor: Anchor.topLeft, size: size));
 
     world.add(background);
     // world.add(ground);
