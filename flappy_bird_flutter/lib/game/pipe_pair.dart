@@ -1,0 +1,56 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:flame/components.dart';
+import 'package:flappy_bird_flutter/game/pipe.dart';
+
+import '../game_screen.dart';
+
+/**
+ * Contiene un paio di Pipe, per crearle mi servono larghezza altezza, spazio per l'uccello
+ * position è relativa al centro, size ovviamente size e gap è lo spazio tra i due pipe
+ */
+class PipePair extends Component with HasGameRef<MyGame> {
+  late final Pipe topPipe;
+  late final Pipe bottomPipe;
+  late final Vector2 position;
+  late final double gap;
+  final Vector2 size = Vector2(64, 320);
+
+
+  PipePair({required this.position, Vector2? size, this.gap = 100});
+
+  @override
+  FutureOr<void> onLoad() {
+    print(size.y);
+
+    topPipe = Pipe(
+        position: Vector2(position.x, position.y - gap/2 ),
+        size: size,
+        rotated: true);
+
+    bottomPipe = Pipe(
+        position: Vector2(position.x, position.y + gap/2),
+        size: size,
+        rotated: false);
+
+
+
+    add(topPipe);
+    add(bottomPipe);
+
+    return super.onLoad();
+  }
+
+
+  @override
+  Future<void> update(double dt) async {
+    print(position);
+    print(size);
+
+    // topPipe.update(dt);
+    // bottomPipe.update(dt);
+
+    super.update(dt);
+  }
+}
