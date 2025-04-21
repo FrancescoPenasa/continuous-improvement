@@ -15,15 +15,16 @@ class PipePair extends Component with HasGameRef<MyGame> {
   late final Pipe bottomPipe;
   late final Vector2 position;
   late final double gap;
+  late  bool isScored;
   final Vector2 size = Vector2(64, 320);
 
 
   PipePair({required this.position, Vector2? size, this.gap = 100});
+      // : super(position: this.position, size: this.size,);
 
   @override
   FutureOr<void> onLoad() {
-    print(size.y);
-
+    isScored = false;
     topPipe = Pipe(
         position: Vector2(position.x, position.y - gap/2 ),
         size: size,
@@ -34,8 +35,6 @@ class PipePair extends Component with HasGameRef<MyGame> {
         size: size,
         rotated: false);
 
-
-
     add(topPipe);
     add(bottomPipe);
 
@@ -45,11 +44,8 @@ class PipePair extends Component with HasGameRef<MyGame> {
 
   @override
   Future<void> update(double dt) async {
-    print(position);
-    print(size);
-
-    // topPipe.update(dt);
-    // bottomPipe.update(dt);
+    topPipe.position = Vector2(topPipe.position.x - 200 *dt, topPipe.position.y);
+    bottomPipe.position = Vector2(bottomPipe.position.x - 200 *dt, bottomPipe.position.y);
 
     super.update(dt);
   }

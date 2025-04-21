@@ -39,7 +39,9 @@ class MyGame extends FlameGame with TapCallbacks {
   late Ground ground;
   late MyParallaxComponent background;
   late Queue<PipePair> pipe_pairs;
+  late TextComponent scoreComponent;
   late FlameTimer.Timer timer; // flame timer
+  int score = 0;
 
   MyGame()
       : super(
@@ -52,7 +54,6 @@ class MyGame extends FlameGame with TapCallbacks {
 
   @override
   FutureOr<void> onLoad() async {
-    pipe_pairs = Queue();
     // debugMode = true;
 
     // init game objects
@@ -68,6 +69,7 @@ class MyGame extends FlameGame with TapCallbacks {
     // world.add(ground);
     world.add(player);
 
+    pipe_pairs = Queue();
     world.addAll(pipe_pairs);
 
     // camera.viewport.position = Vector2(600, 0);
@@ -79,15 +81,21 @@ class MyGame extends FlameGame with TapCallbacks {
       pipe_pairs.add(pp);
 
       // performance enhancement
-      if (pipe_pairs.length > 4) {
+      if (pipe_pairs.length > 3) {
         world.remove(pipe_pairs.removeFirst());
-
       }
 
       // check if first collide, else if player x > first.x -> score + 1
       // world.addAll(pipe_pairs);
     }, repeat: true);
 
+
+    // SCORE
+    scoreComponent = TextComponent(
+      text: 'Score $score',
+      position: Vector2(-size.x/2 + 10.0, -size.y/2 + 10.0),
+    );
+    world.add(scoreComponent);
 
     return super.onLoad();
   }
@@ -96,6 +104,15 @@ class MyGame extends FlameGame with TapCallbacks {
   @override
   void update(double dt) {
     timer.update(dt);
+
+
+    if (pipe_pairs.isNotEmpty &&  !pipe_pairs.first.isScored && pipe_pairs.first.topPipe.position.x <= player.position.x) {
+      pipe_pairs.first.isScored = true;
+      score += 1;
+      scoreComponent.text = 'Score $score';
+      world.add(scoreComponent);
+    }
+
     final cameraY = camera.viewfinder.position.y;
 
     // final playerY = myPlayer.position.y;
