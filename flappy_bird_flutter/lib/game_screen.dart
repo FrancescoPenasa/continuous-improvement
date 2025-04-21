@@ -143,4 +143,13 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     super.onTapDown(event);
   }
 
+  void resetGame() {
+    score = 0;
+    scoreComponent.text = 'Score $score';
+    pipe_pairs.forEach(world.remove);
+    pipe_pairs.clear();
+    player.position = Vector2(-size.x / 2 + 100, 0);
+    // player.reset();
+    gameState = GameState.play;
+  }
 }
