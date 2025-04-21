@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/sprite.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import '../game_screen.dart';
 
 class Player extends SpriteAnimationComponent
-    with HasGameRef<MyGame>, TapCallbacks {
+    with HasGameRef<MyGame>, TapCallbacks, CollisionCallbacks {
   // Define animation states
   static const String IDLE = 'idle';
   static const String WALKING = 'walking';
@@ -29,6 +30,8 @@ class Player extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() async {
+    add(RectangleHitbox(position: Vector2(20, 20), size: Vector2(20, 20)));
+
     // Load the sprite sheet image
     final spriteSheet =
         await gameRef.images.load(AssetsRepository.playerSprite);
@@ -62,6 +65,17 @@ class Player extends SpriteAnimationComponent
   }
 
   @override
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    print('========collisionnnnn====');
+    gameRef.gameState = GameState.pause;
+    // if (other is ScreenHitbox) {
+    //   //...
+    // } else if (other is YourOtherComponent) {
+    //   //...
+    // }
+  }
+
+  @override
   void onTapDown(TapDownEvent event) {
     jump();
     super.onTapDown(event);
@@ -71,19 +85,21 @@ class Player extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
 
-    // Reset velocity
-    velocity.x = 0;
+    if (gameRef.gameState == GameState.play) {
+      // Reset velocity
+      velocity.x = 0;
 
-    // Apply simple gravity
-    velocity.y += 980 * dt; // Gravity constant
+      // Apply simple gravity
+      velocity.y += 980 * dt; // Gravity constant
 
-    // Update position based on velocity
-    position += velocity * dt;
+      // Update position based on velocity
+      position += velocity * dt;
 
-    // Simple ground collision
-    if (position.y >= gameRef.size.y - size.y / 2) {
-      position.y = gameRef.size.y - size.y / 2;
-      velocity.y = 0;
+      // Simple ground collision
+      if (position.y >= gameRef.size.y - size.y / 2) {
+        position.y = gameRef.size.y - size.y / 2;
+        velocity.y = 0;
+      }
     }
 
     // Keep character within screen bounds
@@ -119,6 +135,6 @@ class Player extends SpriteAnimationComponent
   }
 
   void jump() {
-    velocity.y = -400;
+    velocity.y = -300;
   }
 }

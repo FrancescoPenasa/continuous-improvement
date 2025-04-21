@@ -19,7 +19,7 @@ class PipePair extends Component with HasGameRef<MyGame> {
   final Vector2 size = Vector2(64, 320);
 
 
-  PipePair({required this.position, Vector2? size, this.gap = 100});
+  PipePair({required this.position, Vector2? size, this.gap = 200});
       // : super(position: this.position, size: this.size,);
 
   @override
@@ -44,9 +44,14 @@ class PipePair extends Component with HasGameRef<MyGame> {
 
   @override
   Future<void> update(double dt) async {
-    topPipe.position = Vector2(topPipe.position.x - 200 *dt, topPipe.position.y);
-    bottomPipe.position = Vector2(bottomPipe.position.x - 200 *dt, bottomPipe.position.y);
 
-    super.update(dt);
+    if (gameRef.gameState == GameState.play) {
+      topPipe.position =
+          Vector2(topPipe.position.x - 200 * dt, topPipe.position.y);
+      bottomPipe.position =
+          Vector2(bottomPipe.position.x - 200 * dt, bottomPipe.position.y);
+
+      super.update(dt);
+    }
   }
 }

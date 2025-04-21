@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 import '../game_screen.dart';
@@ -13,6 +14,7 @@ class Pipe extends SpriteComponent with HasGameRef<MyGame> {
 
   @override
   FutureOr<void> onLoad() async {
+    add(RectangleHitbox());
     sprite = await Sprite.load('pipe.png');
 
     if (rotated) {

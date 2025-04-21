@@ -16,6 +16,6 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## definition of done
-a working game
-- collision between player and pipes
-- scoring feature
+- [x] a working game
+- [x] collision between player and pipes
+- [x] scoring feature
